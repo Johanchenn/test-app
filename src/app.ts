@@ -1,6 +1,5 @@
 import express, { Request, Response } from "express";
 import axios from "axios";
-import { LRUCache } from "lru-cache";
 import mongoose from "mongoose";
 import { storeAirQualityData } from "./database/storeAirQualityData";
 import AirQualityData from "./models/AirQualityData";
@@ -21,13 +20,6 @@ if (!mongoDbUri) {
     .then(() => console.log("MongoDB Connected"))
     .catch((err) => console.log(err));
 }
-
-// Setting up LRU Cache
-const options = {
-  max: 500, // The maximum size of the cache
-  maxAge: 1000 * 60 * 60, // 1 hour cache expiration
-};
-export const cache = new LRUCache<string, any>(options);
 
 // Function to build the NILU API URL with query parameters
 const buildApiUrl = (endpoint: string, query: any): string => {
