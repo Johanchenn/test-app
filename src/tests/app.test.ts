@@ -1,5 +1,5 @@
 import supertest from "supertest";
-import { app, cache } from "../app"; // Import your Express app
+import { app } from "../app";
 import axios from "axios";
 import AirQualityData from "../models/AirQualityData";
 
@@ -25,25 +25,23 @@ describe("handleProxyRequest", () => {
 
     AirQualityData.findOne = jest.fn().mockResolvedValue(null); // Mock to return null, simulating no data in DB
 
-    const response = await supertest(app).get("/your-route"); // Replace with your actual endpoint
+    const response = await supertest(app).get("/aq/utd?station=Oslo");
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual(mockApiData);
     expect(mockedAxios.get).toHaveBeenCalled();
     expect(AirQualityData.findOne).toHaveBeenCalled();
-    // Add more assertions as needed, e.g., to check if storeAirQualityData was called
   });
 
   it("returns data from the database if available", async () => {
     const mockDbData = { data: [{ id: 1, value: "test data from DB" }] };
     AirQualityData.findOne = jest.fn().mockResolvedValue(mockDbData);
 
-    const response = await supertest(app).get("/your-route"); // Replace with your actual endpoint
+    const response = await supertest(app).get("/aq/utd?station=Oslo");
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual(mockDbData.data);
     expect(AirQualityData.findOne).toHaveBeenCalled();
     expect(mockedAxios.get).not.toHaveBeenCalled(); // Axios should not be called if data is in DB
-    // Add more assertions as needed
   });
 });

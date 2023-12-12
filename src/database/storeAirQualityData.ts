@@ -1,4 +1,3 @@
-// Assuming this file is in the same directory as your models directory
 import AirQualityData from "../models/AirQualityData";
 
 export const storeAirQualityData = async (data: any[], requestUrl: string) => {

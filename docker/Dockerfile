@@ -9,7 +9,7 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
-# Copy the rest of your app's source code from your host to your image filesystem.
+# Copy the rest of the app's source code from the host to the image filesystem.
 COPY . .
 
 # Build the application
@@ -25,6 +25,9 @@ COPY --from=builder /usr/src/app/dist ./dist
 
 # Copy package.json and package-lock.json (or yarn.lock)
 COPY package*.json ./
+
+# Copy .env file for environment variables (if you have one)
+COPY .env ./
 
 # Install only production dependencies
 RUN npm install --only=production
