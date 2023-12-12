@@ -2,18 +2,25 @@ import express, { Request, Response } from "express";
 import axios from "axios";
 import { LRUCache } from "lru-cache";
 import mongoose from "mongoose";
-import ApiResponse from "./models/AirQualityData";
-import { storeAirQualityData } from "./database/database";
+import { storeAirQualityData } from "./database/storeAirQualityData";
 import AirQualityData from "./models/AirQualityData";
+import dotenv from "dotenv";
+dotenv.config();
 
 export const app = express();
 const port = 8080;
 
-// MongoDB connection
-mongoose
-  .connect("your_mongodb_connection_string", {})
-  .then(() => console.log("MongoDB Connected"))
-  .catch((err) => console.log(err));
+const mongoDbUri = process.env.MONGODB_ATLAS_URI;
+
+if (!mongoDbUri) {
+  throw new Error("MONGODB_ATLAS_URI is not defined in .env file");
+} else {
+  // MongoDB connection
+  mongoose
+    .connect(mongoDbUri, {})
+    .then(() => console.log("MongoDB Connected"))
+    .catch((err) => console.log(err));
+}
 
 // Setting up LRU Cache
 const options = {
